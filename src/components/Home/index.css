@@ -1,0 +1,9 @@
+.home-heading{
+    margin-left: 30px;
+    color: rgb(86, 159, 223);
+}
+.ul-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

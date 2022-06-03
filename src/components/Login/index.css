@@ -1,0 +1,18 @@
+.login-bg-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+}
+.input-class{
+width: 150px;
+margin-bottom: 20px;
+}
+.login-button{
+    width: 130px;
+    height: 30px;
+    border: none;
+    margin-top: 20px;
+}
