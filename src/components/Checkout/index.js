@@ -1,21 +1,20 @@
 /* eslint-disable react/destructuring-assignment */
-import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
-import './index.css'
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import "./index.css";
 
-const Checkout = props => {
-  let total = 0
-  const cartList = []
+const Checkout = (props) => {
+  let total = 0;
+  const cartList = [];
 
-  props.allProducts.forEach(i => {
+  props.allProducts.forEach((i) => {
     if (i.isCart === true) {
-      cartList.push(i)
+      cartList.push(i);
     }
-  })
-  console.log(cartList)
-  cartList.forEach(eachCartItem => {
-    total += eachCartItem.price * eachCartItem.count
-  })
+  });
+  cartList.forEach((eachCartItem) => {
+    total += eachCartItem.price * eachCartItem.count;
+  });
   return (
     <div className="checkout-main">
       <div className="cart-summary-container">
@@ -31,10 +30,10 @@ const Checkout = props => {
         </button>
       </Link>
     </div>
-  )
-}
-const mapStateToProps = state => ({
+  );
+};
+const mapStateToProps = (state) => ({
   allProducts: state.addToCart,
-})
+});
 
-export default connect(mapStateToProps)(Checkout)
+export default connect(mapStateToProps)(Checkout);

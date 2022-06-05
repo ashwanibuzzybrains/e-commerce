@@ -15,7 +15,6 @@ const Login = (props) => {
 
       const user = await signInWithEmailAndPassword(auth, email, password);
       const jwtToken = user.user.accessToken;
-
       Cookies.set("jwt_token", jwtToken, {
         expires: 30,
       });

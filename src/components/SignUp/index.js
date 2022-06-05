@@ -8,7 +8,6 @@ const SignUp = () => {
   const SignUpFromHere = async () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(user);
     } catch (e) {
       console.log(e.message);
     }
