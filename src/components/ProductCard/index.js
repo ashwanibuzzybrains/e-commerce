@@ -35,7 +35,7 @@ const ProductCard = (props) => {
     if (result === true) {
       await addDoc(eachData, {
         brand: brand,
-        count: count,
+        count: 1,
         imageUrl: imageUrl,
         isCart: isCart,
         price: price,
@@ -53,7 +53,7 @@ const ProductCard = (props) => {
       <p className="brand">by {brand}</p>
       <div className="product-details">
         <p className="price">Rs {price}/-</p>
-        <p className="price">Quantity - {quantity - count}</p>
+        <p className="price">Quantity - {quantity}</p>
       </div>
       <button
         // eslint-disable-next-line react/destructuring-assignment

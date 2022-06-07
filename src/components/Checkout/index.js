@@ -13,7 +13,8 @@ const Checkout = (props) => {
     }
   });
   cartList.forEach((eachCartItem) => {
-    total += eachCartItem.price * eachCartItem.count;
+    // total += eachCartItem.price * eachCartItem.count;
+    total = 0;
   });
   return (
     <div className="checkout-main">

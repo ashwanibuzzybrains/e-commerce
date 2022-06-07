@@ -5,7 +5,13 @@ import Navbar from "../Navbar";
 import { useEffect, useState } from "react";
 import Checkout from "../Checkout";
 import "./index.css";
-import { collection, addDoc, doc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
 import CartComponents from "../CartComponents";
@@ -27,17 +33,15 @@ const EmptyCartView = () => (
   </div>
 );
 
-const printCart = (cartItemDetails) => {
-  return (
-    <CartComponents
-      cartItemDetails={cartItemDetails}
-      key={cartItemDetails.title}
-    />
-  );
-};
 const Cart = (props) => {
   const { cartList } = props;
   const [firestoreData, setFirestoreData] = useState([]);
+  const [dataIsChanged, setDataisChanged] = useState(true);
+
+  const changeData = () => {
+    setDataisChanged(!dataIsChanged);
+  };
+
   let showEmptyView;
   const checkEmpty = (cartItemDetails) => {
     if (cartItemDetails.isCart === true) {
@@ -56,16 +60,16 @@ const Cart = (props) => {
       const eachData = collection(db, "cartData");
       const querySnapshot = await getDocs(eachData);
       let firestoreArray = [];
+
+      let itemId = "";
       querySnapshot.forEach((doc) => {
-        console.log(doc.data());
+        itemId = doc.id;
         firestoreArray.push(doc.data());
       });
       setFirestoreData(firestoreArray);
     };
     gettingFirebaseData();
-    // console.log("called inside cart");
-  }, []);
-  console.log(firestoreData);
+  }, [dataIsChanged]);
 
   return (
     <>
@@ -77,7 +81,13 @@ const Cart = (props) => {
         <>
           <div className="cart-content-container">
             <h1 className="cart-heading">My Cart</h1>
-            {firestoreData.map((cartItemDetails) => printCart(cartItemDetails))}
+            {firestoreData.map((cartItemDetails) => (
+              <CartComponents
+                cartItemDetails={cartItemDetails}
+                key={cartItemDetails.title}
+                changeData={changeData}
+              />
+            ))}
           </div>
           <Checkout />
         </>

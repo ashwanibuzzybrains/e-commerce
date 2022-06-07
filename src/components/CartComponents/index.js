@@ -1,24 +1,109 @@
 /* eslint-disable react/destructuring-assignment */
-import {BsPlusSquare, BsDashSquare} from 'react-icons/bs'
-import {AiFillCloseCircle} from 'react-icons/ai'
-import {connect} from 'react-redux'
-import {increaseCartItem, decreaseCartItem, delteCartItem} from '../../actions'
-import './index.css'
+import { BsPlusSquare, BsDashSquare } from "react-icons/bs";
+import { AiFillCloseCircle } from "react-icons/ai";
+import { connect } from "react-redux";
+import {
+  increaseCartItem,
+  decreaseCartItem,
+  delteCartItem,
+} from "../../actions";
+import {
+  doc,
+  updateDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+  deleteDoc,
+} from "firebase/firestore";
+import { db } from "../../firebase/firebase";
 
-const CartComponents = props => {
-  const {cartItemDetails} = props
+import "./index.css";
 
-  const {id, count, title, brand, quantity, price, imageUrl} = cartItemDetails
-  const onClickDecrement = () => {
-    props.decreaseCartItem(cartItemDetails)
-  }
-  const onClickIncrement = () => {
-    props.increaseCartItem(cartItemDetails)
-  }
-  const onRemoveCartItem = () => {
-    props.delteCartItem(cartItemDetails)
-  }
-  const totalPrice = price * count
+const CartComponents = (props) => {
+  const { cartItemDetails, changeData } = props;
+
+  const {
+    id,
+    count,
+    title,
+    brand,
+    quantity,
+    price,
+    imageUrl,
+    isCart,
+  } = cartItemDetails;
+
+  let returnCartItem = async () => {
+    const eachData = query(
+      collection(db, "cartData"),
+      where("title", "==", `${title}`)
+    );
+
+    let itemId = "";
+    const querySnapshot = await getDocs(eachData);
+    querySnapshot.forEach((doc) => {
+      itemId = doc.id;
+    });
+    const cartItem = doc(db, "cartData", itemId);
+  };
+
+  const onClickDecrement = async () => {
+    const eachData = query(
+      collection(db, "cartData"),
+      where("title", "==", `${title}`)
+    );
+
+    let itemId = "";
+    const querySnapshot = await getDocs(eachData);
+    querySnapshot.forEach((doc) => {
+      itemId = doc.id;
+    });
+    const cartItem = doc(db, "cartData", itemId);
+    const updatedData = {
+      count: count - 1,
+    };
+    if (count !== 1) {
+      await updateDoc(cartItem, updatedData);
+      changeData();
+    } else {
+      onRemoveCartItem();
+    }
+  };
+  const onClickIncrement = async () => {
+    const eachData = query(
+      collection(db, "cartData"),
+      where("title", "==", `${title}`)
+    );
+
+    let itemId = "";
+    const querySnapshot = await getDocs(eachData);
+    querySnapshot.forEach((doc) => {
+      itemId = doc.id;
+    });
+    const cartItem = doc(db, "cartData", itemId);
+    const updatedData = {
+      count: count + 1,
+    };
+    await updateDoc(cartItem, updatedData);
+    changeData();
+  };
+  const onRemoveCartItem = async () => {
+    const eachData = query(
+      collection(db, "cartData"),
+      where("title", "==", `${title}`)
+    );
+
+    let itemId = "";
+    const querySnapshot = await getDocs(eachData);
+    querySnapshot.forEach((doc) => {
+      itemId = doc.id;
+    });
+    const cartItem = doc(db, "cartData", itemId);
+    await deleteDoc(cartItem);
+    changeData();
+  };
+  const totalPrice = price * count;
 
   return (
     <li className="cart-item">
@@ -67,14 +152,14 @@ const CartComponents = props => {
         <AiFillCloseCircle color="#616E7C" size={20} />
       </button>
     </li>
-  )
-}
-const mapStateToProps = state => ({
+  );
+};
+const mapStateToProps = (state) => ({
   allProducts: state.addToCart,
-})
+});
 
 export default connect(mapStateToProps, {
   increaseCartItem,
   decreaseCartItem,
   delteCartItem,
-})(CartComponents)
+})(CartComponents);
