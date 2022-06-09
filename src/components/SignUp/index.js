@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
-import { Redirect } from "react-router-dom";
-const SignUp = () => {
+import { Redirect, withRouter } from "react-router-dom";
+const SignUp = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const SignUpFromHere = async () => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
+      const { history } = props;
+      history.replace("/");
     } catch (e) {
       console.log(e.message);
     }
@@ -39,4 +41,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default withRouter(SignUp);
